@@ -9,7 +9,6 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-
 SCRIPT = Path(__file__).resolve().parents[1] / "scripts" / "sync_skills.py"
 sys.path.insert(0, str(SCRIPT.parent))
 import sync_skills
@@ -81,17 +80,21 @@ class SyncSkillsTest(unittest.TestCase):
 
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("0 skill(s)", result.stdout)
-        self.assertIn("No skills are defined yet.", (self.root / ".agents/skills/CATALOG.md").read_text())
+        self.assertIn(
+            "No skills are defined yet.", (self.root / ".agents/skills/CATALOG.md").read_text()
+        )
 
     def test_sync_generates_adapter_catalog_and_lock(self) -> None:
-        self.write_skill(extra_frontmatter=['argument-hint: "topic"', "disable-model-invocation: true"])
+        self.write_skill(
+            extra_frontmatter=['argument-hint: "topic"', "disable-model-invocation: true"]
+        )
 
         result = self.run_sync()
         self.assertEqual(result.returncode, 0, result.stderr)
 
         content = self.adapter().read_text(encoding="utf-8")
         self.assertTrue(content.startswith("---\nname: example-skill\n"))
-        self.assertIn("argument-hint: \"topic\"\ndisable-model-invocation: true", content)
+        self.assertIn('argument-hint: "topic"\ndisable-model-invocation: true', content)
         self.assertIn("metadata:\n  group: test\n  origin: shared", content)
         self.assertIn("`.agents/skills/example-skill/SKILL.md`", content)
         self.assertNotIn("../", content)
@@ -128,7 +131,9 @@ class SyncSkillsTest(unittest.TestCase):
         result = self.run_sync()
 
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn("description: >-\n", self.adapter("block-description").read_text(encoding="utf-8"))
+        self.assertIn(
+            "description: >-\n", self.adapter("block-description").read_text(encoding="utf-8")
+        )
         catalog = (self.root / ".agents" / "skills" / "CATALOG.md").read_text(encoding="utf-8")
         self.assertIn("more than one line and should remain portable", catalog)
         self.assertEqual(self.run_sync("--check").returncode, 0)
@@ -137,7 +142,9 @@ class SyncSkillsTest(unittest.TestCase):
         self.write_skill()
         self.assertEqual(self.run_sync().returncode, 0)
         adapter = self.adapter()
-        adapter.write_text(adapter.read_text(encoding="utf-8") + "manual change\n", encoding="utf-8")
+        adapter.write_text(
+            adapter.read_text(encoding="utf-8") + "manual change\n", encoding="utf-8"
+        )
 
         check_result = self.run_sync("--check")
         self.assertNotEqual(check_result.returncode, 0)
@@ -183,7 +190,11 @@ class SyncSkillsTest(unittest.TestCase):
         self.assertEqual(self.run_sync().returncode, 0)
         lock_path = self.root / ".agents" / "skills.lock"
         lock = self.lock()
-        lock["shared_source"] = {"url": "https://example.invalid/t.git", "ref": "v1", "commit": "abc"}
+        lock["shared_source"] = {
+            "url": "https://example.invalid/t.git",
+            "ref": "v1",
+            "commit": "abc",
+        }
         lock_path.write_text(json.dumps(lock), encoding="utf-8")
 
         self.assertEqual(self.run_sync().returncode, 0)
@@ -216,7 +227,9 @@ class SyncSkillsTest(unittest.TestCase):
     def test_invalid_name_fails_before_writing(self) -> None:
         skill_file = self.write_skill()
         skill_file.write_text(
-            skill_file.read_text(encoding="utf-8").replace("name: example-skill", "name: Different_Name"),
+            skill_file.read_text(encoding="utf-8").replace(
+                "name: example-skill", "name: Different_Name"
+            ),
             encoding="utf-8",
         )
 
@@ -276,22 +289,22 @@ class SyncSkillsTest(unittest.TestCase):
         skill = self.write_skill()
         original = skill.read_text(encoding="utf-8")
         cases = [
-            original.replace('"Use for portable adapter tests."', 'Review: changes'),
-            original.replace('"Use for portable adapter tests."', '123'),
-            original.replace('"Use for portable adapter tests."', '[one, two]'),
-            original.replace('"Use for portable adapter tests."', 'null'),
-            original.replace('"Use for portable adapter tests."', '*alias'),
+            original.replace('"Use for portable adapter tests."', "Review: changes"),
+            original.replace('"Use for portable adapter tests."', "123"),
+            original.replace('"Use for portable adapter tests."', "[one, two]"),
+            original.replace('"Use for portable adapter tests."', "null"),
+            original.replace('"Use for portable adapter tests."', "*alias"),
             original.replace('"Use for portable adapter tests."', '"quoted"#bad-comment'),
-            original.replace('  origin: shared', '    origin: shared'),
-            original.replace('metadata:', '  stray: value\nmetadata:'),
-            original.replace('metadata:', 'allowed-tools: [Read, Bash]\nmetadata:'),
-            original.replace('metadata:', 'disable-model-invocation: "true"\nmetadata:'),
-            original.replace('metadata:', 'model: broken: value\nmetadata:'),
-            original.replace('  group:', '\tgroup:'),
-            original.replace('description: ', 'description:'),
-            original.replace('metadata:', 'metadata:#bad-comment'),
-            original.replace('  origin: shared', '  origin:shared'),
-            original.replace('  origin: shared', '  origin: shared\n  true: value'),
+            original.replace("  origin: shared", "    origin: shared"),
+            original.replace("metadata:", "  stray: value\nmetadata:"),
+            original.replace("metadata:", "allowed-tools: [Read, Bash]\nmetadata:"),
+            original.replace("metadata:", 'disable-model-invocation: "true"\nmetadata:'),
+            original.replace("metadata:", "model: broken: value\nmetadata:"),
+            original.replace("  group:", "\tgroup:"),
+            original.replace("description: ", "description:"),
+            original.replace("metadata:", "metadata:#bad-comment"),
+            original.replace("  origin: shared", "  origin:shared"),
+            original.replace("  origin: shared", "  origin: shared\n  true: value"),
         ]
         for content in cases:
             with self.subTest(content=content):
@@ -302,8 +315,10 @@ class SyncSkillsTest(unittest.TestCase):
 
     def test_quoted_colon_and_metadata_comments_are_supported(self) -> None:
         skill = self.write_skill(description="Review: changes")
-        skill.write_text(skill.read_text(encoding="utf-8").replace(
-            "  origin:", "  # ownership\n  origin:"), encoding="utf-8")
+        skill.write_text(
+            skill.read_text(encoding="utf-8").replace("  origin:", "  # ownership\n  origin:"),
+            encoding="utf-8",
+        )
         result = self.run_sync()
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(self.run_sync("--check").returncode, 0)
@@ -334,6 +349,24 @@ class SyncSkillsTest(unittest.TestCase):
         unknown.write_bytes(b"first\r\n")
         self.assertNotEqual(before, sync_skills.skill_content_hash(skill.parent))
 
+    def test_skill_file_order_and_hash_are_platform_independent(self) -> None:
+        skill = write_skill(self.root)
+        references = skill.parent / "references"
+        references.mkdir()
+        (references / "notes.md").write_text("reference\n", encoding="utf-8")
+        (skill.parent / "Zeta.txt").write_text("asset\n", encoding="utf-8")
+
+        ordered = [path.as_posix() for path in sync_skills.iter_skill_files(skill.parent)]
+        # Byte order: uppercase names sort before lowercase, regardless of the host
+        # filesystem or of pathlib's case-insensitive comparison on Windows.
+        self.assertEqual(ordered, ["SKILL.md", "Zeta.txt", "references/notes.md"])
+
+        digest = sync_skills.skill_content_hash(skill.parent)
+        with mock.patch.object(
+            sync_skills.Path, "__lt__", lambda self, other: str(self).lower() < str(other).lower()
+        ):
+            self.assertEqual(digest, sync_skills.skill_content_hash(skill.parent))
+
     def test_git_autocrlf_checkout_passes_check(self) -> None:
         skill = self.write_skill()
         (skill.parent / "config.toml").write_bytes(b'name = "test"\n')
@@ -342,23 +375,49 @@ class SyncSkillsTest(unittest.TestCase):
         (self.root / ".gitattributes").write_bytes(b"* text=auto\n*.md text eol=lf\n")
         self.assertEqual(self.run_sync().returncode, 0)
         commands = [
-            ["git", "init", "-q"], ["git", "config", "core.autocrlf", "false"],
+            ["git", "init", "-q"],
+            ["git", "config", "core.autocrlf", "false"],
             ["git", "add", "."],
-            ["git", "-c", "user.name=Test", "-c", "user.email=test@example.invalid",
-             "commit", "-qm", "fixture"],
+            [
+                "git",
+                "-c",
+                "user.name=Test",
+                "-c",
+                "user.email=test@example.invalid",
+                "commit",
+                "-qm",
+                "fixture",
+            ],
         ]
         for command in commands:
             result = subprocess.run(command, cwd=self.root, capture_output=True, text=True)
             self.assertEqual(result.returncode, 0, result.stderr)
         with tempfile.TemporaryDirectory() as temporary:
             clone = Path(temporary) / "checkout"
-            result = subprocess.run(["git", "clone", "-q", "--no-hardlinks", "-c",
-                                     "core.autocrlf=true", str(self.root), str(clone)],
-                                    capture_output=True, text=True)
+            result = subprocess.run(
+                [
+                    "git",
+                    "clone",
+                    "-q",
+                    "--no-hardlinks",
+                    "-c",
+                    "core.autocrlf=true",
+                    str(self.root),
+                    str(clone),
+                ],
+                capture_output=True,
+                text=True,
+            )
             self.assertEqual(result.returncode, 0, result.stderr)
-            self.assertIn(b"\r\n", (clone / skill.relative_to(self.root)).with_name("config.toml").read_bytes())
-            result = subprocess.run([sys.executable, str(SCRIPT), "--root", str(clone), "--check"],
-                                    capture_output=True, text=True)
+            self.assertIn(
+                b"\r\n",
+                (clone / skill.relative_to(self.root)).with_name("config.toml").read_bytes(),
+            )
+            result = subprocess.run(
+                [sys.executable, str(SCRIPT), "--root", str(clone), "--check"],
+                capture_output=True,
+                text=True,
+            )
             self.assertEqual(result.returncode, 0, result.stderr)
 
     def test_malformed_lock_does_not_delete_stale_adapter(self) -> None:

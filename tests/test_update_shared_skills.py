@@ -9,9 +9,8 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-from test_sync_skills import write_skill
 import update_shared_skills
-
+from test_sync_skills import write_skill
 
 SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
 UPDATE_SCRIPT = SCRIPTS / "update_shared_skills.py"
@@ -51,7 +50,13 @@ class UpdateSharedSkillsTest(unittest.TestCase):
         self.assertEqual(self.run_sync(self.source).returncode, 0)
 
     def run_sync(self, root: Path, *arguments: str) -> subprocess.CompletedProcess[str]:
-        return run(sys.executable, str(root / "scripts" / "sync_skills.py"), "--root", str(root), *arguments)
+        return run(
+            sys.executable,
+            str(root / "scripts" / "sync_skills.py"),
+            "--root",
+            str(root),
+            *arguments,
+        )
 
     def run_update(self, *arguments: str) -> subprocess.CompletedProcess[str]:
         return run(
@@ -78,13 +83,17 @@ class UpdateSharedSkillsTest(unittest.TestCase):
 
         self.assertEqual(result.returncode, 0, result.stderr)
         skills = self.target / ".agents" / "skills"
-        self.assertEqual((skills / "shared-skill/references/guide.md").read_text(encoding="utf-8"), "v2\n")
+        self.assertEqual(
+            (skills / "shared-skill/references/guide.md").read_text(encoding="utf-8"), "v2\n"
+        )
         self.assertFalse((skills / "shared-skill/references/obsolete.md").exists())
         self.assertTrue((venv / "pyvenv.cfg").is_file())
         self.assertFalse((skills / "source-local").exists())
         self.assertTrue((skills / "target-local" / "SKILL.md").is_file())
         self.assertTrue((self.target / "_notes" / "grills" / "README.md").is_file())
-        self.assertTrue((self.target / ".claude" / "skills" / "shared-skill" / "SKILL.md").is_file())
+        self.assertTrue(
+            (self.target / ".claude" / "skills" / "shared-skill" / "SKILL.md").is_file()
+        )
 
         lock = json.loads((self.target / ".agents" / "skills.lock").read_text(encoding="utf-8"))
         self.assertEqual(lock["shared_source"]["url"], str(self.source))
@@ -98,7 +107,9 @@ class UpdateSharedSkillsTest(unittest.TestCase):
 
         self.assertEqual(self.run_update().returncode, 0)
 
-        self.assertEqual((self.target / "_notes" / "README.md").read_text(encoding="utf-8"), "custom\n")
+        self.assertEqual(
+            (self.target / "_notes" / "README.md").read_text(encoding="utf-8"), "custom\n"
+        )
 
     def test_update_refuses_local_skill_that_collides_with_shared_name(self) -> None:
         write_skill(self.target, name="shared-skill", origin="local")
@@ -107,7 +118,9 @@ class UpdateSharedSkillsTest(unittest.TestCase):
 
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("collide with shared skill names: shared-skill", result.stderr)
-        self.assertFalse((self.target / ".agents" / "skills" / "shared-skill" / "references").exists())
+        self.assertFalse(
+            (self.target / ".agents" / "skills" / "shared-skill" / "references").exists()
+        )
 
     def test_dry_run_writes_nothing(self) -> None:
         result = self.run_update("--dry-run")
@@ -130,9 +143,26 @@ class UpdateSharedSkillsTest(unittest.TestCase):
         if run("git", "--version").returncode != 0:
             self.skipTest("git is not available")
         run("git", "init", "-q", cwd=self.source)
-        run("git", "-c", "user.name=t", "-c", "user.email=t@example.invalid", "add", ".", cwd=self.source)
+        run(
+            "git",
+            "-c",
+            "user.name=t",
+            "-c",
+            "user.email=t@example.invalid",
+            "add",
+            ".",
+            cwd=self.source,
+        )
         commit = run(
-            "git", "-c", "user.name=t", "-c", "user.email=t@example.invalid", "commit", "-q", "-m", "init",
+            "git",
+            "-c",
+            "user.name=t",
+            "-c",
+            "user.email=t@example.invalid",
+            "commit",
+            "-q",
+            "-m",
+            "init",
             cwd=self.source,
         )
         self.assertEqual(commit.returncode, 0, commit.stderr)
@@ -155,13 +185,18 @@ class UpdateSharedSkillsTest(unittest.TestCase):
         self.assertEqual(len(lock["shared_source"]["commit"]), 40)
 
     def snapshot(self) -> dict[str, bytes]:
-        return {str(path.relative_to(self.target)): path.read_bytes()
-                for path in self.target.rglob("*") if path.is_file() and "__pycache__" not in path.parts}
+        return {
+            str(path.relative_to(self.target)): path.read_bytes()
+            for path in self.target.rglob("*")
+            if path.is_file() and "__pycache__" not in path.parts
+        }
 
     def test_new_sync_version_is_used_on_first_update(self) -> None:
         script = self.source / "scripts/sync_skills.py"
-        script.write_text(script.read_text(encoding="utf-8").replace(
-            '"# Skill catalog"', '"# Skill catalog v2"'), encoding="utf-8")
+        script.write_text(
+            script.read_text(encoding="utf-8").replace('"# Skill catalog"', '"# Skill catalog v2"'),
+            encoding="utf-8",
+        )
         result = self.run_update()
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("# Skill catalog v2", (self.target / ".agents/skills/CATALOG.md").read_text())
@@ -169,7 +204,9 @@ class UpdateSharedSkillsTest(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
 
     def test_failed_new_sync_leaves_target_unchanged(self) -> None:
-        (self.source / "scripts/sync_skills.py").write_text("raise SystemExit(17)\n", encoding="utf-8")
+        (self.source / "scripts/sync_skills.py").write_text(
+            "raise SystemExit(17)\n", encoding="utf-8"
+        )
         before = self.snapshot()
         result = self.run_update()
         self.assertNotEqual(result.returncode, 0)
@@ -216,7 +253,7 @@ class UpdateSharedSkillsTest(unittest.TestCase):
             self.assertEqual(self.run_sync(self.target, "--check").returncode, 0)
 
     def test_source_and_target_directory_links_fail_without_external_write(self) -> None:
-        skill = write_skill(self.target, name="shared-skill")
+        write_skill(self.target, name="shared-skill")
         with tempfile.TemporaryDirectory() as temporary:
             external = Path(temporary)
             sentinel = external / "guide.md"
@@ -272,7 +309,9 @@ class UpdateSharedSkillsTest(unittest.TestCase):
                 raise OSError("injected commit failure")
             return real_write(path, content)
 
-        with mock.patch.object(update_shared_skills.sync_skills, "atomic_write_bytes", side_effect=fail_once):
+        with mock.patch.object(
+            update_shared_skills.sync_skills, "atomic_write_bytes", side_effect=fail_once
+        ):
             with self.assertRaisesRegex(OSError, "injected commit failure"):
                 update_shared_skills.update(self.target, str(self.source), "main", False)
         self.assertTrue(failed)

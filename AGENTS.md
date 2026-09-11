@@ -44,9 +44,25 @@
   `<yymmdd-hhmm>-<topic-slug>.md`. `scripts/sync_skills.py --check` validates these
   filenames. Only the directory `README.md` files are committed.
 
+## Python project
+
+- Package code lives in `src/<package>/` and tests in `tests/`. The environment is
+  managed by uv through `pyproject.toml`, `uv.lock`, and `.python-version`.
+- Install with `uv sync`. Lint with `uv run ruff check .` and `uv run ruff format .`.
+  Test with `uv run pytest`. Run every hook with `uv run pre-commit run --all-files`.
+- Add runtime dependencies with `uv add <package>` and development tools with
+  `uv add --group dev <package>`. Commit `uv.lock` together with `pyproject.toml`.
+- `requires-python` is `>=3.10`. CI tests 3.10 and 3.12 on Ubuntu and Windows, so
+  avoid platform-specific paths, shell assumptions, and newer syntax.
+- `scripts/sync_skills.py`, `scripts/update_shared_skills.py`, and their tests must
+  stay stdlib-only. They run with the system Python in `validate-skills.yml` and in
+  repositories that do not use uv.
+- Ruff excludes `.agents/`, `.claude/`, and `_notes/`. Do not reformat shared skills:
+  their content hash is recorded in `.agents/skills.lock`.
+
 ## Repository work
 
 - Preserve unrelated user changes.
 - Keep changes focused and run checks relevant to the changed files.
 - Add repository-wide build, test, and contribution conventions to this file as the
-  template is customized.
+  project grows.

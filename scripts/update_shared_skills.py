@@ -29,7 +29,6 @@ sys.dont_write_bytecode = True
 
 import sync_skills  # noqa: E402
 
-
 DEFAULT_SOURCE = "https://github.com/euisuk-chung/template-repo-with-skills.git"
 DEFAULT_REF = "main"
 
@@ -101,10 +100,7 @@ def copy_skill_directory(source: Path, destination: Path, dry_run: bool) -> list
         destination_file = destination / relative
         sync_skills.safe_path(source, source_file)
         sync_skills.safe_path(destination, destination_file)
-        if (
-            destination_file.is_file()
-            and destination_file.read_bytes() == source_file.read_bytes()
-        ):
+        if destination_file.is_file() and destination_file.read_bytes() == source_file.read_bytes():
             continue
         actions.append(f"write {destination_file}")
         if not dry_run:
@@ -158,19 +154,29 @@ def update(repository_root: Path, source: str, ref: str, dry_run: bool) -> int:
     note_errors = sync_skills.inspect_notes(repository_root)
     if note_errors:
         raise UpdateError("; ".join(note_errors))
-    local_skills = {skill.name: skill for skill in sync_skills.discover_skills(
-        repository_root / ".agents/skills")}
+    local_skills = {
+        skill.name: skill
+        for skill in sync_skills.discover_skills(repository_root / ".agents/skills")
+    }
 
     with tempfile.TemporaryDirectory(prefix="shared-skills-") as temporary:
         source_root, commit = resolve_source(source, ref, Path(temporary))
         sync_skills.safe_path(source_root, source_root / ".agents/skills")
-        source_skills = [skill for skill in sync_skills.discover_skills(
-            source_root / ".agents/skills") if skill.origin == "shared"]
-        conflicts = sorted(skill.name for skill in source_skills
-                           if skill.name in local_skills and local_skills[skill.name].origin == "local")
+        source_skills = [
+            skill
+            for skill in sync_skills.discover_skills(source_root / ".agents/skills")
+            if skill.origin == "shared"
+        ]
+        conflicts = sorted(
+            skill.name
+            for skill in source_skills
+            if skill.name in local_skills and local_skills[skill.name].origin == "local"
+        )
         if conflicts:
-            raise UpdateError(f"local skill(s) collide with shared skill names: {', '.join(conflicts)}. "
-                              "Rename the local skill before updating.")
+            raise UpdateError(
+                f"local skill(s) collide with shared skill names: {', '.join(conflicts)}. "
+                "Rename the local skill before updating."
+            )
 
         # The old parser must understand the source's metadata. Incompatible schema
         # upgrades fail closed; they require an explicit tooling migration first.
@@ -180,8 +186,11 @@ def update(repository_root: Path, source: str, ref: str, dry_run: bool) -> int:
         for relative, content in before.items():
             sync_skills.atomic_write_bytes(stage / relative, content)
         for skill in source_skills:
-            copy_skill_directory(source_root / ".agents/skills" / skill.name,
-                                 stage / ".agents/skills" / skill.name, False)
+            copy_skill_directory(
+                source_root / ".agents/skills" / skill.name,
+                stage / ".agents/skills" / skill.name,
+                False,
+            )
         for relative in (*SHARED_TOOLING, *SCAFFOLD_IF_MISSING):
             sync_skills.safe_path(source_root, source_root / relative)
             if relative in SCAFFOLD_IF_MISSING and (stage / relative).exists():
@@ -189,25 +198,42 @@ def update(repository_root: Path, source: str, ref: str, dry_run: bool) -> int:
             copy_file(source_root / relative, stage / relative, False)
 
         lock["shared_source"] = {"url": source, "ref": ref, "commit": commit}
-        sync_skills.atomic_write(stage / sync_skills.LOCK_RELATIVE_PATH,
-                                 json.dumps(lock, indent=2, sort_keys=True) + "\n")
+        sync_skills.atomic_write(
+            stage / sync_skills.LOCK_RELATIVE_PATH,
+            json.dumps(lock, indent=2, sort_keys=True) + "\n",
+        )
         # Execute the NEW tool in a clean interpreter, never the imported old module.
         # --dry-run validates in the disposable stage too, without changing the target.
         for arguments in ([], ["--check"]):
             result = subprocess.run(
-                [sys.executable, "-B", str(stage / "scripts/sync_skills.py"),
-                 "--root", str(stage), *arguments],
-                cwd=stage, capture_output=True, text=True, check=False,
+                [
+                    sys.executable,
+                    "-B",
+                    str(stage / "scripts/sync_skills.py"),
+                    "--root",
+                    str(stage),
+                    *arguments,
+                ],
+                cwd=stage,
+                capture_output=True,
+                text=True,
+                check=False,
             )
             if result.returncode:
-                raise UpdateError(f"staged sync failed; target unchanged:\n{result.stderr}{result.stdout}")
+                raise UpdateError(
+                    f"staged sync failed; target unchanged:\n{result.stderr}{result.stdout}"
+                )
         after = managed_snapshot(stage)
         # Publish provenance last, after content and generated adapters.
-        ordered_paths = sorted(before.keys() | after.keys(), key=lambda path: (
-            path == Path(sync_skills.LOCK_RELATIVE_PATH), path.as_posix()))
-        changes = {repository_root / path: after.get(path)
-                   for path in ordered_paths
-                   if before.get(path) != after.get(path)}
+        ordered_paths = sorted(
+            before.keys() | after.keys(),
+            key=lambda path: (path == Path(sync_skills.LOCK_RELATIVE_PATH), path.as_posix()),
+        )
+        changes = {
+            repository_root / path: after.get(path)
+            for path in ordered_paths
+            if before.get(path) != after.get(path)
+        }
         # Fail if another writer changed managed content during staging.
         if managed_snapshot(repository_root) != before:
             raise UpdateError("target changed during staging; retry without concurrent writers")
@@ -224,8 +250,11 @@ def update(repository_root: Path, source: str, ref: str, dry_run: bool) -> int:
     shared_names = {skill.name for skill in source_skills}
     for name, skill in sorted(local_skills.items()):
         if skill.origin == "shared" and name not in shared_names:
-            print(f"warning: shared skill {name!r} no longer exists in the source; "
-                  "delete it or change its metadata.origin to local", file=sys.stderr)
+            print(
+                f"warning: shared skill {name!r} no longer exists in the source; "
+                "delete it or change its metadata.origin to local",
+                file=sys.stderr,
+            )
     if dry_run:
         print(f"Dry run: {len(changes)} change(s) pending from {source} @ {ref}.")
     else:

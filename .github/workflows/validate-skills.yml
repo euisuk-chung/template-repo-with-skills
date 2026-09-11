@@ -1,29 +1,58 @@
 name: Validate shared skills
 
+# Runs with the system Python only (no project dependencies) so that the skill
+# tooling stays usable in any repository created from the template.
+
 on:
-  pull_request:
   push:
+    branches: [main]
+    paths:
+      - ".agents/**"
+      - ".claude/**"
+      - "_notes/**"
+      - "scripts/sync_skills.py"
+      - "scripts/update_shared_skills.py"
+      - "tests/test_sync_skills.py"
+      - "tests/test_update_shared_skills.py"
+      - ".github/workflows/validate-skills.yml"
+  pull_request:
+    paths:
+      - ".agents/**"
+      - ".claude/**"
+      - "_notes/**"
+      - "scripts/sync_skills.py"
+      - "scripts/update_shared_skills.py"
+      - "tests/test_sync_skills.py"
+      - "tests/test_update_shared_skills.py"
+      - ".github/workflows/validate-skills.yml"
+  workflow_dispatch:
 
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   validate:
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
         python: ["3.10", "3.x"]
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python }}
 
       - name: Test skill tooling
-        run: python -m unittest discover -s tests -v
+        # Only the stdlib-only tooling tests; project tests need `uv run pytest`.
+        run: python -m unittest discover -s tests -p "test_*_skills.py" -v
 
       - name: Check generated skill outputs
         run: python scripts/sync_skills.py --check
