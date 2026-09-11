@@ -1,0 +1,30 @@
+{
+  "generated_by": "scripts/sync_skills.py",
+  "skills": {
+    "eli5": {
+      "group": "writing",
+      "origin": "shared",
+      "sha256": "1f8ab37fef565437e9ae2db5825e4c50ef9bec39cc397582a0e225a5cfa5ef8d"
+    },
+    "excalidraw-diagram": {
+      "group": "visual",
+      "origin": "shared",
+      "sha256": "584edb90cbbea4ad2fb679dc0417b8da34323ae7f027b6fd837a4cb9cb998107"
+    },
+    "grill-me": {
+      "group": "workflow",
+      "origin": "shared",
+      "sha256": "ae5ff8f3be298e12069bb87fa82d18a2637417f30a1e8313f4e81b6d31b03ac1"
+    },
+    "handoff": {
+      "group": "workflow",
+      "origin": "shared",
+      "sha256": "fed0291d2f9f69f07d12e12c013402fd9419258195eef797d34171195c803dee"
+    },
+    "humanize": {
+      "group": "writing",
+      "origin": "shared",
+      "sha256": "c63709a45dab468969a8e4dc04a111a3c508473c09a506b9c4557e0a463dd227"
+    }
+  }
+}
