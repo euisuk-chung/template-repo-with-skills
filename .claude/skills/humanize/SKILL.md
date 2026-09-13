@@ -1,6 +1,6 @@
 ---
 name: humanize
-description: Rewrite English or Korean text to remove common AI-writing patterns while preserving meaning, facts, voice, register, and genre. Use when the user asks to humanize text, remove AI tone, reduce robotic phrasing, or match a supplied writing sample; not for translation or substantive authoring.
+description: Use this skill whenever a user wants existing English or Korean writing to sound natural and human without changing what it says. Typical triggers are that it reads like ChatGPT/AI, a press release, or marketing copy; it is too polished or every sentence ends alike; it reads as stiff translation-ese; or the user asks, in English or Korean, to remove the AI or GPT feel, make it read like a person wrote it, fix translation-ese, polish the prose, "de-AI" it, or make it less robotic. Also fire when they name specific tics to strip (em dashes, "it is worth noting", "moreover", "the notable point is that", "in conclusion"). Invoke even for one paragraph, and when a writing sample to match is supplied. It keeps facts, numbers, honorific level, code, links, and tables intact. Accepts pasted text or a file path; "edit in place" and "leave X untouched" are normal constraints, not reasons to skip. Not for translation, summarizing, spelling-only fixes, changing formality level, or drafting new text.
 metadata:
   group: writing
   origin: shared
