@@ -68,6 +68,11 @@ Before touching anything, form a quick mental diagnosis:
    (a bolded aside, set off by a dash, inside a triad), count it as one tell and fix it once.
 4. **Is it already good?** Some text has few tells. If so, say so and make only the few edits that help.
    Over-polishing clean writing is itself a failure.
+5. **What must survive?** Before editing, note the invariants in one quick list: the facts and
+   claims; identifiers (commands, paths, URLs, status values, error codes, product names); numbers,
+   dates, versions, units, conditions, comparisons; and every exception, limitation, risk, approval,
+   rollback step, or next action. These are the things a rewrite silently narrows or drops. Check the
+   list again in Step 5. Technical, operational, and legal text lives or dies on the last category.
 
 ## Step 3 (optional): Match the user's voice
 
@@ -100,7 +105,8 @@ Apply the fixes from the reference. Follow these **Prime Directives** in every r
 4. **Don't switch genres.** A column doesn't become a personal essay; a report doesn't become a blog
    post; an essay doesn't turn literary.
 5. **Be local.** Fix the spans that carry tells. Don't rewrite sentences wholesale that were fine.
-   Wholesale rewriting is how meaning drifts and change rate explodes.
+   Wholesale rewriting is how meaning drifts and change rate explodes, and regenerating a text from
+   scratch reliably plants a fresh set of tells in place of the old ones.
 6. **Natural over perfect.** Real human writing is uneven. Leave some plainness. Don't optimize every
    sentence to maximum polish, because that itself reads as machine-tuned.
 7. **Fix the shape, not the phrase.** Swapping "delve" for "explore" or "또한" for "그리고" one word at
@@ -108,7 +114,8 @@ Apply the fixes from the reference. Follow these **Prime Directives** in every r
    carries a tell, restate its point plainly; when a paragraph is built on a formula, rebuild the
    paragraph around what it actually says.
 8. **Keep the human markers.** Plain verbs, simple "is/has" sentences, everyday hedges ("perhaps",
-   "I think", "~인 것 같다"), a slightly wordy idiom, a passive that reads fine, a sentence starting with
+   "I think", "~인 것 같다"), a slightly wordy idiom, a subject or object left out because context supplies it, a passive
+   that reads fine, a sentence starting with
    "And" or "But", a repeated plain word instead of a synonym: these are evidence a person wrote it.
    Both references list them. Stripping them is not humanizing; it is flattening.
 9. **Let the genre set the voice.** Personal writing, blogs, and opinion keep the writer's asides,
@@ -121,10 +128,20 @@ reference and not to taste. If you find yourself rewriting more than about half 
 rewriting, not humanizing. Stop, revert to the original, and re-do it more conservatively. Big change
 rates almost always mean meaning got damaged.
 
+**Copy is the exception to the budget.** Marketing copy, headlines, taglines, CTAs, slides, and brand
+stories legitimately change most of their words when humanized; a percentage cap makes no sense for a
+seven-word headline. Replace the budget with a fact-anchor guard: numbers, prices, dates, proper nouns,
+and legal wording stay character-identical; the core promise stays the same promise to the same
+audience; and no specific (a metric, a customer, a count) appears that the source or the author did
+not supply. Both references end with a copy-layer section for these genres.
+
 **Don't become the model.** If every rewrite you produce opens with a number, ends on a blunt fact,
 and runs short sentences, that is a new register, and it will read as machine output soon enough.
 Apply what the diagnosis found, not the whole checklist. When you humanize several pieces in one
 session, look at the set: if they all start the same way, vary some of them.
+A rewrite that visibly tries to look human (ellipses everywhere, inverted word order, injected
+colloquial asides, a fragment for drama) is a tell of its own. Prefer the plainer version; a
+sentence that looks slightly bare but flows beats one that performs naturalness.
 
 **Your rewrite can inject tells.** Measured on humanizer output: rewrites added commas after
 connective endings, planted a fresh "A가 아니라 B" while removing another, tidied endings with "결국"
@@ -133,12 +150,15 @@ list of these. Before returning, scan the *rewrite* for them, not just the origi
 
 ## Step 5: Self-check before returning
 
-Run this checklist against your draft. Any failure → fix that edit before returning.
+Run this checklist against your draft. Any failure → fix that edit before returning. Then ask once,
+in plain words: "What still makes this read as AI-generated?" Answer it and fix that too. For Korean,
+read the result aloud in your head; a sentence that can't be spoken naturally still carries the tell.
 
 1. Every number, date, proper noun, and direct quote is identical to the original.
 2. No fact, name, source, opinion, or claim exists in the output that wasn't in the input.
-3. No claim was dropped. Merging a list, cutting a hedge, or turning bullets into prose loses content
-   most often; recheck those spots.
+3. No claim was dropped. Walk the invariant list from Step 2: every fact, identifier, number,
+   condition, limitation, risk, approval, and next action is still there at the same strength. Merging
+   a list, cutting a hedge, or turning bullets into prose loses content most often; recheck those spots.
 4. Register and genre unchanged. Human markers preserved (see directive 8).
 5. No AI cliché was *added*, and no new uniform register imposed.
 6. Hedge and obligation counts match the original; no polarity flipped around a negation.

@@ -24,6 +24,7 @@ K. 챗봇 잔재 (chatbot residue)
 L. 사람 글의 표지 (human markers to preserve)
 M. 표지가 아닌 것 (not tells)
 N. 재작성 중 주입 금지 (things a rewrite tends to inject)
+O. 카피 레이어 (marketing copy, headlines, brand stories)
 
 **Do NOT touch (never a tell):** proper nouns, product/model/org names; numbers, dates, units; quoted
 speech with a speech verb (말했다·밝혔다·~에 따르면); statutory text; math/chem/stat notation; standard
@@ -198,7 +199,8 @@ indicator is never evidence; look for clusters.
 Removal target only. **Never generate any of these while rewriting** (a real complaint: living speech
 "얼마나 대단했냐면 —" was replaced with "기록적인 성과를 거두었다·괄목할 만한·~로 평가된다").
 
-- **D-1 [S1] Wrap-up lexicon.** 결론적으로 / 요약하면 / 종합하면 / 정리하자면 / 궁극적으로 / 요컨대;
+- **D-1 [S1] Wrap-up and setup lexicon.** 결론적으로 / 요약하면 / 종합하면 / 정리하자면 / 궁극적으로 /
+  요컨대; setups "이유는 단순하다", "핵심은 다음과 같다";
   "~라고 할 수 있다 / ~라고 볼 수 있다"; "~라 하겠다 / ~라 할 것이다"; "~에 다름 아니다". → Delete; the last
   paragraph is already the conclusion. "~라고 할 수 있다" → "~이다" only if the text already treats it as
   fact; otherwise "~로 보인다" (same hedge strength).
@@ -271,6 +273,11 @@ Removal target only. **Never generate any of these while rewriting** (a real com
   repeatedly (that is its own tell, I-2).
 - **E-4 [S2] Every paragraph 3–4 sentences.** → Mix one-sentence and six-sentence paragraphs. Let
   section depth vary.
+- **E-6 [technique, genre-gated] Inversion (도치) and ellipsis marks.** Speech-like prose sometimes
+  flips word order ("좋았다, 그 영화는."). Use it rarely, and only where the genre already talks that
+  way (blog, thread, personal essay). In lecture notes, reports, and ebooks it reads as trying too
+  hard, which is its own tell. Same for "……": never add an ellipsis the source didn't have; models
+  told to "sound natural" over-insert it and the result turns into overwrought sentiment.
 - **E-5 [S2, dialogue and spoken genres only] Honorific-level mixing in one text.** "도와주시겠습니까?" then
   "도와줘?"; a ~합니다 paragraph followed by a ~한다 paragraph. → Pick one level and hold it. Formal
   single-register reports are exempt; there the problem is the reverse (E-3).
@@ -295,8 +302,11 @@ Removal target only. **Never generate any of these while rewriting** (a real com
   multiply "~해야 한다" while unpacking.**
 - **F-5 [S2] "N 능력" chains 3+** ("사고 능력", "추론 능력", "장기 문맥 유지 능력"). → Verbify: "잘 사고한다",
   "워크플로우를 얼마나 잘 처리하는지". At most two per document.
-- **F-6 [S2] Demonstrative overuse 이러한·그러한·해당 + repeated explicit subject** ("이 서비스는… 이
-  서비스는…"). → Drop the obvious subject (Korean allows it); use 이/그 or nothing.
+- **F-6 [S2] Over-complete sentences.** Every sentence spells out its subject and object; demonstratives
+  이러한·그러한·해당 pile up; the same subject is repeated ("이 서비스는… 이 서비스는…"). Korean drops what
+  context supplies, and models don't. → Drop inferable subjects and repeated objects and let the
+  sentences run on. A sentence that looks slightly "empty" but flows is the human one. Use 이/그 or
+  nothing instead of 이러한/해당.
 - **F-7 [S2] Chained superficial analysis "~하며, ~하고, ~하며"** ("다양성을 보여주며, 조화를 상징하고,
   활성화에 기여하며"). → Split into sentences with concrete verbs, or cut the evaluative links.
 
@@ -377,6 +387,9 @@ isn't corporate. → Delete entirely. These are chat framing, not part of the te
 Measured as human-only or human-heavy. Their presence is evidence a person wrote it. Never strip them,
 and never inject fake versions.
 
+- Ellipsis of inferable subjects and objects (zero anaphora). A Korean writer leaves out what the
+  reader can supply; a slightly bare sentence that flows is a human sign. Don't fill these in.
+- Uneven breath (호흡): a clipped sentence next to a long, winding one; a paragraph that ends early.
 - Speaker self-intervention: "솔직히 말하면", "모르겠지만", "내가 보기에", "잘은 모르지만" (human 13 docs vs
   AI 0). Note this is the **opposite** of English, where "Honestly?" as a standalone opener is a tell.
 - Sentence-initial "또," (humans; AI writes "또한"). "당시" (human 10 vs AI 0). "힘들다" (5 vs 0).
@@ -413,9 +426,48 @@ Measured on humanizer output itself. Check the *rewrite* for these before return
 - "~해야 한다" multiplied while unpacking nominal proposals (3 → 8).
 - Any D-series cliché (기록적인 성과, 괄목할 만한, 주목받았다, 의미가 크다, 지금이야말로 ~할 때입니다).
 - Register upgrade ('-했-' → '-하였-'), erased spoken endings, literary embellishment.
+- Ellipsis marks "……", inverted word order, or colloquial asides added to look natural, especially in
+  a report or lecture text. A rewrite that performs naturalness is a tell of its own.
+- Subjects and objects restored that the writer had left out on purpose.
 - A new hedge or a lost hedge; a new obligation or a lost one.
 - A fabricated date after 향후/앞으로, a fabricated source after a verdict, a fabricated specific
   replacing a vague claim.
+
+## O. 카피 레이어 (marketing copy, headlines, CTAs, brand stories) — copy mode only
+
+Apply only to marketing copy, landing pages, slogans, slides, and brand or founder stories. Here the
+change-rate budget does not apply; the fact-anchor guard does: numbers, prices, dates, proper nouns,
+and legal wording stay character-identical, the core promise stays the same promise to the same
+audience, and no specific is invented. Informational copy (FAQ, specs, prices, 사업자 정보) is exempt
+from the appeal-voice rules below.
+
+- **O-1 [S1 with a system subject] Machine-verb calque "굴러가다/굴리다".** "자동화가 24시간 굴러갑니다" →
+  "자동화는 24시간 알아서 돌아갑니다". "일이 굴러간다" with a general-work subject is ordinary speech; leave it.
+- **O-2 [S1] Abstract-noun closure "하나의 흐름이 됩니다 / 하나의 경험이 됩니다"** (English become-X
+  endings; the most frequent copy calque). → Close on a verb: "흩어진 일이 하나로 이어집니다".
+- **O-3 [S2] Agency calque "나 대신 일합니다 / 나와 함께 일합니다".** → Benefactive and no pronoun:
+  "대신 일해 줍니다". Fix the personified subject (D-5) first if present.
+- **O-4 [S2] Metaphor calque "X는 팀의 엔진/심장/날개", "같은 페이지를 본다", "손발을 맞추다" for sync.**
+  → Direct verb: "이 도구가 팀을 움직입니다". One metaphor in a slogan headline is allowed.
+- **O-5 [S2, appeal copy only] "더는 ~ 아닙니다" for English no-longer.** → "이제는/이젠 ~ 아닙니다".
+- **O-6 [S2, appeal headlines and CTAs only] Third-person exposition with no reader address**
+  ("자동화가 반복 업무를 처리합니다"). → Second person: "반복 업무를 AI에게 맡기세요". FAQ, specs, and
+  prices stay third person.
+- **O-7 [S1 phrase, S2 structure] Story clichés.** Openers "어느 날", "그렇게 ~는 시작되었습니다"; pivots
+  "하지만 그때", "그 순간", "운명처럼"; the moral closer "이 경험을 통해 ~을 배웠습니다"; the founder myth
+  "작은 원룸에서 시작해" with no lived detail; a conflict→resolution→lesson arc where everything resolves.
+  → Open on a concrete scene from the source ("첫 주문이 들어온 날, 사무실에는 책상이 하나뿐이었다"); end on
+  the action or consequence ("그 실패 이후 반품 절차를 바꿨다"), not the stated lesson; let one problem
+  stay open if the source admits one. Never invent the scene.
+- **O-8 [S2] Stock emotion "눈물이 흘러내렸다", "정말 감동적인 순간이었다".** → The concrete detail the source
+  gives ("편지에는 '다시 사겠다'는 문장이 세 번 반복돼 있었다"); if it gives none, a plain feeling word.
+- **O-9 [S2] Precision theater "수많은 논문 분석", "후기 2042건 분석"** with nothing behind it; testimonial
+  templates "13년차 직장맘도 인정한". → Flag for the author ("출처 확인 필요"); never replace with a made-up
+  number. Real, verifiable numbers are exempt.
+- **O-10 [S1] Headline formulas.** Dash contrast "복붙에서 위임으로 — 목표만 주면"; particle or bare-noun
+  fragment "성공의 열쇠"; "A에서 B로" slot opener "엑셀에서 노션으로". → One claim with a predicate: "목표만
+  주면, 나머지는 자동화가 처리합니다"; "자동화가 성공의 열쇠입니다". Complete metadata titles ("2026년 Q1 사업
+  보고") are fine.
 
 ---
 

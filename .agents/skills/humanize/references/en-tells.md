@@ -18,6 +18,7 @@ H. Discourse-level habits (long pieces)
 I. Chatbot residue
 J. Human markers to preserve
 K. Not tells (do not flag)
+L. Copy layer (marketing copy, headlines, CTAs)
 
 **Do NOT touch (never a tell):** proper nouns, product/model/org names; numbers, dates, units; text
 inside quotation marks (direct quotes); titles; legal/statutory citations; math/chem/stat notation;
@@ -61,7 +62,8 @@ using it. Never add a fact, name, date, statistic, or source that isn't already 
   *"Symmetry is the language of trust."* → *"Symmetric layouts feel more predictable to users."*
 - **A-4 [S1] Staged run-up.** "Let's dive in", "Let's break this down", "Here's what you need to know",
   "Here's the thing", "The thing is", "Honestly?", "Look,", "Real talk", "Plot twist:", "What if I told
-  you", self-answered "Question? Answer." pairs, and the colon-reveal ("The best part: it learns.").
+  you", self-answered "Question? Answer." pairs ("Ever wondered...?", "Think about it."), and the
+  colon-reveal ("The best part: it learns.").
   → Delete the run-up; open on the content. "Honestly" mid-sentence is ordinary; the standalone opener
   is the tell.
 - **A-5 [S1] Arguing with no one.** "This isn't about", "I'm not saying", "To be clear", "Don't get me
@@ -86,6 +88,13 @@ using it. Never add a fact, name, date, statistic, or source that isn't already 
   frame ("She noted... She noted... She filed...").
   → Merge or vary. Do not ban the repeated word itself; deliberate anaphora ("She came. She saw.") is
   human.
+- **A-11 [S1] Reassurance kickers.** "And that's okay.", "And that's fine.", "There's nothing wrong
+  with that.", "no shame in...", "you're not alone", "it's completely normal". Comfort the reader
+  never asked for. → Cut.
+- **A-12 [S2] Forced metaphors and figurative overwriting.** A decorative metaphor that adds imagery
+  but no meaning, often followed by its own explanation ("The codebase is a garden: it needs
+  tending..."); mixed metaphors; a figurative substitute where the plain word is clearer.
+  → Plain words. Keep a metaphor that carries the argument; cut the one that decorates it.
 
 ## B. Inflation and promotion — S1
 
@@ -144,7 +153,9 @@ Word lists go stale: date-stamp your suspicion.
   indelible mark" (111x), "today's fast-paced world" (107x), "aims to explore" (50x), "In recent
   years", "At the intersection of", "Now more than ever", "Here's the kicker", "Whether you're X or Y",
   "When it comes to", "I recently had the pleasure", "keen interest" (cover letters), "Bridging the gap
-  between", "Navigate the complexities of", "Foster a culture of", "Move the needle".
+  between", "Navigate the complexities of", "Foster a culture of", "Move the needle". Marketing and blog clichés: "at the end of the day", "in a
+  world where", "circle back", "double down", "make no mistake", "it turns out", "let me be clear",
+  "lean into", "must-visit", "stunning", and "straightforward" as a reflex.
   → Restate plainly. *"notable works include"* → *"best known for"*.
 - **C-4 [S2] Copula avoidance.** "serves as", "stands as", "functions as", "operates as", "represents
   a", "refers to", "boasts/features/offers/maintains a"; elaborate forms "ventured into politics as a
@@ -158,8 +169,15 @@ Word lists go stale: date-stamp your suspicion.
 - **C-6 [S2] Nominalization density.** Noun-heavy sentences ("the implementation of the optimization of
   the process") run 1.5 to 2x human rates.
   → Restore the verb: *"the implementation of"* → *"implementing"*.
-- **C-7 [S2] Predicate hyphens.** "the report is high-quality", "the process is well-defined".
-  → Drop the hyphen in predicate position; keep it attributive ("a high-quality report").
+- **C-7 [S2] Hyphen habits.** Predicate hyphens ("the report is high-quality"), and hyphenated pairs
+  applied with perfect consistency (third-party, data-driven, real-time, long-term, end-to-end,
+  decision-making) where people hyphenate unevenly. Weak alone.
+  → Drop the hyphen in predicate position; keep it attributive ("a high-quality report"). Leave the
+  pairs unless the text clusters other tells.
+- **C-8 [S2] Synonym cycling (elegant variation).** "the protagonist… the main character… the
+  central figure… the hero" for one referent; "the city… the region… the municipality". A leftover
+  of older models' repetition penalty; people repeat the plain word.
+  → Use the same word again.
 
 ## D. Attribution, hedging, and knowledge-gap filler — S1~S2
 
@@ -185,7 +203,9 @@ Word lists go stale: date-stamp your suspicion.
 
 - **E-1 [S1] Connective pile-up.** Sentence-initial "Moreover,", "Furthermore,", "Additionally,", "In
   addition,", "Notably,", "Importantly,", "That said,", "That being said,", "Ultimately,", "Moving
-  forward,". Rule of thumb: more than one connective opener in a paragraph, or the same one twice in a
+  forward,"; adverb openers that tell the reader how to feel ("Interestingly,", "Crucially,",
+  "Essentially,"); and a casual opener used habitually ("So,", "Look,", or "And"/"But" starting
+  every other paragraph). Rule of thumb: more than one connective opener in a paragraph, or the same one twice in a
   section.
   → Remove most and let sentence order carry the logic. Never bare-delete a transition that carries a
   real logical link; restructure or use a plainer one. Transitions in isolation are not a tell;
@@ -289,7 +309,8 @@ these is not de-AI-ing; it removes evidence a person wrote it.
 - **Agentless passive voice.** LLMs use it at about half the human rate. "Convert to active" is not a
   humanizing edit; leave passives alone unless a sentence is genuinely unclear.
 - A specific, odd detail; a dated or era-bound reference; mixed feelings left unresolved; a genuine
-  aside or self-correction; a sentence starting with *And* or *But*; one short emphatic sentence.
+  aside or self-correction; an occasional sentence starting with *And* or *But*; one short emphatic
+  sentence.
 - Repetition of a plain word instead of synonym cycling (older models rotated synonyms; humans repeat).
 - British vs. American spelling as found. Don't normalize.
 
@@ -305,6 +326,36 @@ these is not de-AI-ing; it removes evidence a person wrote it.
 - Real alternatives in a design doc or tutorial (that is not "arguing with no one").
 - Useful limits and disclaimers that answer a question the reader actually has.
 
+## L. Copy layer (marketing copy, headlines, taglines, CTAs) — copy mode only
+
+Apply only to marketing copy, landing pages, slogans, slides, and brand stories. The change-rate
+budget does not apply here; the fact-anchor guard does: numbers, prices, dates, proper nouns, and
+legal wording stay character-identical, the core promise stays the same promise to the same audience,
+and no metric, customer, or count appears that the source did not supply.
+
+- **L-1 [S1 as a whole phrase, S2 otherwise] Aspirational verb + abstract object.** "Unleash your
+  potential", "Elevate your workflow", "Transform the way you X", "Empower your team".
+  → A concrete claim or outcome from the source: *"Ship your first automation in ten minutes."*
+- **L-2 [S1] Contrastive-negation headline.** "It's not just X, it's Y", "Not X. Y.", "More than a
+  platform: a movement". → State the claim: *"One tool that replaces the copy-paste routine."*
+- **L-3 [S2] Tricolon tagline.** "Fast. Simple. Scalable." with equal length and interchangeable
+  adjectives; "No fluff. No filler. No stress." → Two verifiable facts: *"Queries return in under a
+  second; setup is one command."* Only if the source has them; otherwise one plain sentence.
+- **L-4 [S1] Landscaping opener.** "In today's fast-paced digital world", "In the ever-evolving
+  landscape of X", "In an era of". → Open on the audience's need or the product fact.
+- **L-5 [S2] Poster closer.** An aphoristic, motivational pull-quote ending a section where the next
+  step should be. → End on the concrete next step or the call to action.
+- **L-6 [S2] Hollow strategy-speak.** Gerund + abstract noun with no object: "Empowering innovation.",
+  "Delivering business outcomes.", "Driving meaningful impact." → Add the object and, if the source has
+  one, the metric: *"Cuts review turnaround from two days to two hours."*
+- **L-7 [S2 hype, not bland] CTA microcopy.** Hype labels "Join the Revolution", "Unleash Your
+  Potential" convict; bland labels "Get Started", "Submit" are ordinary human UI and stay.
+  → Plain action verb: *"Start a free trial."*
+- **L-8 [S2] Audience straddle.** "Whether you're a beginner or a pro", "Whether you're solo or
+  enterprise". → Pick the audience the source actually serves: *"Built for teams of two to two hundred."*
+- **L-9 [S2] Confirmational-authority opener.** "The truth is,", "The reality is,", "Here's the thing:".
+  → Deliver the point: *"Most dashboards go unopened after week one."*
+
 ---
 
 ## Self-check (after rewriting)
@@ -318,7 +369,8 @@ these is not de-AI-ing; it removes evidence a person wrote it.
    every opener a metric).
 6. The five survivors hunted: a not-X-but-Y contrast, a one-line closer, a dash cluster, a decorative
    triad, a bold label.
-7. Change stayed roughly 10 to 30% (up to about 40% for tell-dense text). Past half: revert and redo.
+7. Ask once, plainly: "What still makes this read as AI-generated?" Fix what you answer.
+8. Change stayed roughly 10 to 30% (up to about 40% for tell-dense text). Past half: revert and redo.
 
 ## Internal self-assessment (never shown to the user)
 
