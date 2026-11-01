@@ -10,8 +10,8 @@ dependencies = []
 [dependency-groups]
 dev = [
   "pre-commit>=4.0",
-  "pytest>=8.0",
-  "ruff>=0.16",
+  "pytest>=9.2.0",
+  "ruff>=0.17.3",
 ]
 
 [build-system]
